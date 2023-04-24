@@ -37,43 +37,52 @@ def isWin(gameDesk_):
     pass
     return 0
 
-def nextTurn(turn, char_, gameDesk_):
+def getInput(char_, gameDesk_):
 
-    inputString = input("Введите координаты клетки в формате  XY (строка, столбец): ").replace(" ","")
+    while 1:
+        print("\033[H\033[J")
+        if char_ == 'X':
+            print("Ходит 'крестик'...")
+        else:
+            print("Ходит 'нолик'...")
 
-    if not (len(inputString) == 2 or inputString.isdigit()):
-        print("Неверный ввод. X и Y должны быть цыфрами от 1 до 3")
-        return -1
+        drawGameDesk(gameDesk_)
 
-    x, y = map(int, inputString[0:])
-    x -= 1
-    y -= 1
+        inputString = input("Введите координаты клетки в формате  XY (строка, столбец): ").replace(" ","")
 
-    if not (0 <= x <= 2 and 0 <= y <= 2):
-        print("Координаты вне диапазона. Повторите ввод")
-        return -1
+        if not (len(inputString) == 2 and inputString.isdigit()):
+            print("Неверный ввод. X и Y должны быть цыфрами от 1 до 3")
+            continue
 
-    if not gameDesk_[x][y] == " ":
-        print("Клетка занята. Повторите ввод")
-        return -1
+        x, y = map(int, inputString[0:])
+        x -= 1
+        y -= 1
 
-    gameDesk_[x][y] = char_
+        if not (0 <= x <= 2 and 0 <= y <= 2):
+            print("Координаты вне диапазона. Повторите ввод")
+            continue
 
-    if turn >= 5:
-        return isWin(gameDesk_)
-    else: return 0
+        if not gameDesk_[x][y] == " ":
+            print("Клетка занята. Повторите ввод")
+            continue
+
+        return x, y
+
+
 
 
 turn = 1
 while turn < 10:
-    print("\033[H\033[J")
+
     if turn % 2:
-        print("Ходит 'крестик'...")
         char_ = 'X'
     else:
-        print("Ходит 'нолик'...")
         char_ = '0'
-    drawGameDesk(gameDesk)
-    if nextTurn(turn, char_, gameDesk) >= 0:
-        turn += 1
+
+    x, y = getInput(char_, gameDesk)
+    gameDesk[x][y] = char_
+
+
+
+    turn += 1
 
