@@ -1,7 +1,7 @@
 # tic-tac-toe game for SkillFactory B5.6
 import os
 
-helloText = """
+hello_text = """
 ***********************************************************************************************
 *                                                                                             *
 *     *******   *   *   *        *******     *      *    *        *******   ***    * * *      *
@@ -11,7 +11,7 @@ helloText = """
 *        *      *   *   *           *    *       *  *    *           *      ***    * * *      *
 *                                                                                             *
 ***********************************************************************************************"""
-gameRulesText = """
+rule_text = """
     Правила игры:
     Игроки поочередно вводят координаты клеток в формате XY (строка, столбец) и таким образом
     ставят на свободные клетки поля 3×3 знаки (один всегда крестики, другой всегда нолики).
@@ -19,52 +19,51 @@ gameRulesText = """
     выигрывает. Первый ходит крестик - 'X'."""
 
 # Заполняем клетки пробелами
-gameDesk = [[" ", " ", " "] for i in range(0, 3)]
+gamedesk = [[" ", " ", " "] for i in range(0, 3)]
 
 # Отрисовка игрового поля
-def drawGameDesk(gameDesk_):
+def draw_gamedesk(gamedesk_):
     #print("\n\n")
     print()
     print()
     print("     |  " + "  |  ".join("123") + "  |")
     print("-----|" * 4)
     for i in range(0, 3):
-        print(f"  {i+1}  |", end='')
+        print(f"  {i + 1}  |", end='')
         for j in range(0, 3):
-            print(f"  {gameDesk_[i][j]}  |", end='')
+            print(f"  {gamedesk_[i][j]}  |", end='')
         print("\n" + "-----|" * 4)
     print()
 
 
 # Проверка на выигрышную комбинацию
-def isWin(char_):
-    winStates = (((0,0),(0,1),(0,2)),((1,0),(1,1),(1,2)),((2,0),(2,1),(2,2)),((0,0),(1,0),(2,0)),((0,1),(1,1),(2,1)),
-    ((0,2),(1,2),(2,2)),((0,0),(1,1),(2,2)),((0,2),(1,1),(2,0)))
+def is_win(char_):
+    win_states = (((0,0),(0,1),(0,2)),((1,0),(1,1),(1,2)),((2,0),(2,1),(2,2)),((0,0),(1,0),(2,0)),((0,1),(1,1),(2,1)),
+                ((0,2),(1,2),(2,2)),((0,0),(1,1),(2,2)),((0,2),(1,1),(2,0)))
 
-    for state in winStates:
-        capturedCells = 0
+    for state in win_states:
+        captured_cells = 0
         for x, y in state:
-            if gameDesk[x][y] == char_:
-                capturedCells += 1
+            if gamedesk[x][y] == char_:
+                captured_cells += 1
             else:
                 break
-        if capturedCells == 3:
+        if captured_cells == 3:
             return True
     return False
 
 
 # Ввод координат клетки и их валидация
-def getInput(char_):
+def get_input(char_):
 
     while 1:
+        in_string = input("Введите координаты клетки в формате  XY (строка, столбец): ").replace(" ","")
 
-        inString = input("Введите координаты клетки в формате  XY (строка, столбец): ").replace(" ","")
-
-        if not (len(inString) == 2 and inString.isdigit()):
+        if not (len(in_string) == 2 and in_string.isdigit()):
             print("Неверный ввод. X и Y должны быть цыфрами от 1 до 3")
             continue
 
-        x, y = map(int, inString)
+        x, y = map(int, in_string)
         x -= 1
         y -= 1
 
@@ -72,7 +71,7 @@ def getInput(char_):
             print("Координаты вне диапазона. Повторите ввод")
             continue
 
-        if not gameDesk[x][y] == " ":
+        if not gamedesk[x][y] == " ":
             print("Клетка занята. Повторите ввод")
             continue
 
@@ -81,12 +80,13 @@ def getInput(char_):
 
 # Очистка экрана, отображение правил игры
 os.system('cls||clear')
-print(helloText)
-print(gameRulesText)
+print(hello_text)
+print(rules_text)
 input("\n               Нажмите 'Enter' чтобы продолжить...")
 os.system('cls||clear')
-drawGameDesk(gameDesk)
+draw_gamedesk(gamedesk)
 turn = 0
+
 while turn < 9:
     turn += 1
     if turn % 2:
@@ -96,13 +96,12 @@ while turn < 9:
         char_ = '0'
         print("Ходит 'нолик'...")
 
-    x, y = getInput(char_)
-
-    gameDesk[x][y] = char_
+    x, y = get_input(char_)
+    gamedesk[x][y] = char_
     os.system('cls||clear')
-    drawGameDesk(gameDesk)
+    draw_gamedesk(gameDesk)
 
-    if isWin(char_):
+    if is_win(char_):
         print("   **************")
         print(f"   * Победил {char_}! *")
         print("   **************")
